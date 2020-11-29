@@ -30,9 +30,9 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
     if(newMember.channel && newMember.channel.id == global.channelId && !oldMember.channel || newMember.channel && newMember.channel.id == global.channelId && oldMember.channel.id != global.channelId){
         let broadcast = client.voice.createBroadcast(),
-            ttsContent = `${oldMember.member.nickname.replace(' ', "%20")}%20added%20to%20queue.%20please%20wait%20a%20moment`;
+            ttsContent = `${oldMember.member.displayName.replace(' ', '%20')}%20added%20to%20queue.%20please%20wait%20a%20moment`;
 
-        broadcast.play(`http://api.voicerss.org/?key=${config.ttsToken}&hl=en-us&v=Amy&c=WAV&src=${ttsContent}`);
+        setTimeout(() =>{broadcast.play(`http://api.voicerss.org/?key=${config.ttsToken}&hl=en-us&v=Amy&c=WAV&src=${ttsContent}`)}, 1500);
 
         client.voice.connections.first().play(broadcast);
         const me = await client.users.fetch(global.owner);
@@ -78,7 +78,6 @@ client.on('messageReactionAdd', async (react, newMember) => {
         }
     }
 });
-
 
 
 client.login(config.token);
