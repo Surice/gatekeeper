@@ -12,6 +12,7 @@ const global = {
 
 let client = new Discord.Client();
 
+
 console.log("Loading...");
 client.on('ready', ()=>{
     console.log("---------------------------");
@@ -19,12 +20,21 @@ client.on('ready', ()=>{
     console.log("---------------------------\n");
 
     client.user.setActivity(`for People`, {type: "WATCHING"});
+
+    let channel = client.channels.cache.get(global.channelId);
+    channel.join();
 });
 
 client.on('voiceStateUpdate', async (oldMember, newMember) => {
-    if(newMember.channel && newMember.channel.id == global.channelId && !oldMember.channel || newMember.channel && newMember.channel.id == global.channelId && oldMember.channel.id != global.channelId){
-        oldMember.member.send("du bist in der Warteschlange. Bitte hab einen moment gedult");
+    if(oldMember.member.id == client.user.id || oldMember.member.id == global.owner) return;
 
+    if(newMember.channel && newMember.channel.id == global.channelId && !oldMember.channel || newMember.channel && newMember.channel.id == global.channelId && oldMember.channel.id != global.channelId){
+        let broadcast = client.voice.createBroadcast(),
+            ttsContent = `${oldMember.member.nickname.replace(' ', "%20")}%20added%20to%20queue.%20please%20wait%20a%20moment`;
+
+        broadcast.play(`http://api.voicerss.org/?key=${config.ttsToken}&hl=en-us&v=Amy&c=WAV&src=${ttsContent}`);
+
+        client.voice.connections.first().play(broadcast);
         const me = await client.users.fetch(global.owner);
         me.send(`<@${oldMember.id}> wartet um gemovet zu werden!`).then(e =>{
             e.react('✅');

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +18,8 @@
   },
   "homepage": "https://github.com/Surice/gatekeeper#readme",
   "dependencies": {
+    "@discordjs/opus": "^0.3.3",
     "cron": "^1.8.2",
-    "discord.js": "^12.5.0"
+    "discord.js": "^12.5.1"
   }
 }
